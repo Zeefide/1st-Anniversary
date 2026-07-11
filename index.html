@@ -747,13 +747,13 @@ Your Husband, Zeth🤍`,
   ],
 
   scrapbook: [
-    { caption:"[Caption 1]", story:"[The story behind this one.]", tilt:"-4deg" },
-    { caption:"[Caption 2]", story:"[The story behind this one.]", tilt:"3deg" },
-    { caption:"[Caption 3]", story:"[The story behind this one.]", tilt:"-2deg" },
-    { caption:"[Caption 4]", story:"[The story behind this one.]", tilt:"4deg" },
-    { caption:"[Caption 5]", story:"[The story behind this one.]", tilt:"-3deg" },
-    { caption:"[Caption 6]", story:"[The story behind this one.]", tilt:"2deg" }
-  ],
+  { image:"images/Photo 1.jpg", caption:"[Caption 1]", story:"[Story 1]", tilt:"-4deg" },
+  { image:"images/Photo 2.jpg", caption:"[Caption 2]", story:"[Story 2]", tilt:"3deg" },
+  { image:"images/Photo 3.jpg", caption:"[Caption 3]", story:"[Story 3]", tilt:"-2deg" },
+  { image:"images/Photo 4.jpg", caption:"[Caption 4]", story:"[Story 4]", tilt:"4deg" },
+  { image:"images/Photo 5.jpg", caption:"[Caption 5]", story:"[Story 5]", tilt:"-3deg" },
+  { image:"images/Photo 6.jpg", caption:"[Caption 6]", story:"[Story 6]", tilt:"2deg" }
+],
 
   // 100 placeholder reasons — edit freely, keep the array length or shrink it
   reasons: [
@@ -1144,10 +1144,7 @@ function startLetterTyping(){
       <div class="polaroid-inner">
         <div class="polaroid-face front">
           <div class="washi"></div>
-          <div class="washi"></div>🌷
-          <div class="polaroid-photo">
-  <img src="Photo ${CONFIG.scrapbook.indexOf(item) + 1}.jpg" alt="${item.caption}">
-</div>
+          <div class="polaroid-photo">🌷</div>
           <div class="polaroid-cap">${item.caption}</div>
         </div>
         <div class="polaroid-face back">${item.story}</div>
