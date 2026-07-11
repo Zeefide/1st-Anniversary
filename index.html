@@ -271,6 +271,10 @@ section{ position:relative; width:100%; }
   width:100%; height:78%; border-radius:1px;
   background:linear-gradient(135deg,var(--sage) 0%, var(--sage-dark) 100%);
   display:flex; align-items:center; justify-content:center; color:var(--white); font-size:2rem;
+  overflow:hidden;
+}
+.polaroid-photo img{
+  width:100%; height:100%; object-fit:cover; display:block;
 }
 .polaroid-cap{ font-family:var(--script); text-align:center; margin-top:8px; color:var(--sage-deep); font-size:1.05rem; }
 .washi{
@@ -747,12 +751,12 @@ Your Husband, Zeth🤍`,
   ],
 
   scrapbook: [
-  { image:"images/Photo 1.jpg", caption:"[Caption 1]", story:"[Story 1]", tilt:"-4deg" },
-  { image:"images/Photo 2.jpg", caption:"[Caption 2]", story:"[Story 2]", tilt:"3deg" },
-  { image:"images/Photo 3.jpg", caption:"[Caption 3]", story:"[Story 3]", tilt:"-2deg" },
-  { image:"images/Photo 4.jpg", caption:"[Caption 4]", story:"[Story 4]", tilt:"4deg" },
-  { image:"images/Photo 5.jpg", caption:"[Caption 5]", story:"[Story 5]", tilt:"-3deg" },
-  { image:"images/Photo 6.jpg", caption:"[Caption 6]", story:"[Story 6]", tilt:"2deg" }
+  { image:"images/Photo 1.jpg", caption:"Photo 1", story:"[Story 1]", tilt:"-4deg" },
+  { image:"images/Photo 2.jpg", caption:"Photo 2", story:"[Story 2]", tilt:"3deg" },
+  { image:"images/Photo 3.jpg", caption:"Photo 3", story:"[Story 3]", tilt:"-2deg" },
+  { image:"images/Photo 4.jpg", caption:"Photo 4", story:"[Story 4]", tilt:"4deg" },
+  { image:"images/Photo 5.jpg", caption:"Photo 5", story:"[Story 5]", tilt:"-3deg" },
+  { image:"images/Photo 6.jpg", caption:"Photo 6", story:"[Story 6]", tilt:"2deg" }
 ],
 
   // 100 placeholder reasons — edit freely, keep the array length or shrink it
@@ -1144,7 +1148,7 @@ function startLetterTyping(){
       <div class="polaroid-inner">
         <div class="polaroid-face front">
           <div class="washi"></div>
-          <div class="polaroid-photo">🌷</div>
+          <div class="polaroid-photo"><img src="${item.image}" alt="${item.caption}" loading="lazy"></div>
           <div class="polaroid-cap">${item.caption}</div>
         </div>
         <div class="polaroid-face back">${item.story}</div>
