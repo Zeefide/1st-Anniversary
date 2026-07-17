@@ -271,10 +271,6 @@ section{ position:relative; width:100%; }
   width:100%; height:78%; border-radius:1px;
   background:linear-gradient(135deg,var(--sage) 0%, var(--sage-dark) 100%);
   display:flex; align-items:center; justify-content:center; color:var(--white); font-size:2rem;
-  overflow:hidden;
-}
-.polaroid-photo img{
-  width:100%; height:100%; object-fit:cover; display:block;
 }
 .polaroid-cap{ font-family:var(--script); text-align:center; margin-top:8px; color:var(--sage-deep); font-size:1.05rem; }
 .washi{
@@ -394,15 +390,29 @@ input[type=range]{ accent-color:var(--sage-dark); width:140px; }
 .counter-num{ font-family:var(--display); font-size:2.4rem; }
 .counter-lbl{ font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; opacity:.8; margin-top:4px; }
 
+/* ================= SECRET GARDEN ================= */
+#scene-secret{
+  background:linear-gradient(180deg,#20302a, #142019); color:var(--night-ink); text-align:center; min-height:560px;
+}
+.gate-wrap{ width:220px; height:260px; margin:30px auto; cursor:pointer; position:relative; }
+.gate-leaf{ position:absolute; top:0; width:50%; height:100%; background:linear-gradient(180deg,#7a5a3a,#5c4126); transition:transform 1.1s var(--ease-silk); }
+.gate-leaf.left{ left:0; border-radius:8px 0 0 8px; transform-origin:left center; }
+.gate-leaf.right{ right:0; border-radius:0 8px 8px 0; transform-origin:right center; }
+.gate-wrap.open .gate-leaf.left{ transform:rotateY(112deg); }
+.gate-wrap.open .gate-leaf.right{ transform:rotateY(-112deg); }
+.gate-glow{ position:absolute; inset:14px; background:radial-gradient(circle, rgba(216,196,140,.5), transparent 70%); opacity:0; transition:opacity 1s; }
+.gate-wrap.open .gate-glow{ opacity:1; }
+.secret-msg{ max-width:560px; margin:20px auto 0; font-family:var(--script); font-size:1.4rem; line-height:1.8; opacity:0; transition:opacity 1.2s var(--ease-silk); }
+.secret-msg.show{ opacity:1; }
+
 /* ================= FUTURE LETTERS ================= */
 #scene-futureletters{ background:var(--cream); }
 .fl-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:22px; margin-top:30px; }
-.fl-env{ background:var(--white); border-radius:16px; padding:26px 20px; text-align:center; box-shadow:0 14px 30px -16px rgba(60,78,55,.35); }
+.fl-env{ background:var(--white); border-radius:16px; padding:26px 20px; text-align:center; cursor:pointer; box-shadow:0 14px 30px -16px rgba(60,78,55,.35); }
 .fl-env .ic{ font-size:2.4rem; }
 .fl-env .lbl{ font-family:var(--display); font-size:1.2rem; color:var(--sage-deep); margin-top:8px; }
-.fl-env.locked{ cursor:not-allowed; opacity:.72; filter:grayscale(.25); }
-.fl-env.locked .ic{ filter:grayscale(1) opacity(.7); }
-.fl-lock{ font-family:var(--body); font-size:.78rem; letter-spacing:.05em; color:var(--sage-dark); margin-top:10px; opacity:.85; }
+.fl-body{ max-height:0; overflow:hidden; transition:max-height .6s var(--ease-silk); font-family:var(--script); font-size:1.1rem; color:var(--sage-dark); text-align:left; }
+.fl-env.open .fl-body{ max-height:300px; margin-top:14px; }
 
 /* ================= WISHING TREE ================= */
 #scene-tree{ background:linear-gradient(180deg,var(--cream), #eef0e2); text-align:center; }
@@ -449,6 +459,7 @@ body.day-mode .icon-btn{ border-color:rgba(60,78,55,.35); background:rgba(255,25
 body.day-mode #scene-open{ background:linear-gradient(180deg,#cfe4c9,#eef1e6 70%, var(--cream)); }
 body.day-mode #scene-nightsky{ background:linear-gradient(180deg,#e9f0e2,#f6f3e9); color:var(--ink); }
 body.day-mode #scene-nightsky .section-title, body.day-mode #scene-nightsky .eyebrow{ color:var(--sage-deep); }
+body.day-mode #scene-secret{ background:linear-gradient(180deg,#e9f0e2,var(--cream)); color:var(--ink); }
 body.day-mode #scene-final{ background:linear-gradient(180deg,#dcecd4,var(--cream)); color:var(--ink); }
 
 .confetti-piece{ position:fixed; top:-20px; z-index:150; pointer-events:none; animation:confettiFall linear forwards; }
@@ -490,7 +501,7 @@ button:focus-visible, .tap-tulip-wrap:focus-visible{ outline:2px solid var(--gol
 
 <!-- Audio element — swap the <source> src to change the music -->
 <audio id="bgm" loop preload="none">
-  <source src="Audio/Background Music.mp3" type="audio/mpeg">
+  <source src="REPLACE_WITH_YOUR_MUSIC_FILE.mp3" type="audio/mpeg">
 </audio>
 
 <!-- ================= OPENING SCENE ================= -->
@@ -636,6 +647,20 @@ button:focus-visible, .tap-tulip-wrap:focus-visible{ outline:2px solid var(--gol
   </div>
 </section>
 
+<!-- ================= SECRET GARDEN ================= -->
+<section id="scene-secret">
+  <div class="section-inner">
+    <div class="eyebrow reveal" style="color:var(--gold-soft)">Almost There</div>
+    <h2 class="section-title reveal" style="color:var(--night-ink)">One More Surprise Awaits...</h2>
+    <div class="gate-wrap" id="gateWrap" role="button" tabindex="0" aria-label="Open the gate">
+      <div class="gate-glow"></div>
+      <div class="gate-leaf left"></div>
+      <div class="gate-leaf right"></div>
+    </div>
+    <div class="secret-msg" id="secretMsg"></div>
+  </div>
+</section>
+
 <!-- ================= FUTURE LETTERS ================= -->
 <section id="scene-futureletters">
   <div class="section-inner">
@@ -722,12 +747,12 @@ Your Husband, Zeth🤍`,
   ],
 
   scrapbook: [
-  { image:"images/Photo 1.jpg", caption:"Photo 1", story:"[Story 1]", tilt:"-4deg" },
-  { image:"images/Photo 2.jpg", caption:"Photo 2", story:"[Story 2]", tilt:"3deg" },
-  { image:"images/Photo 3.jpg", caption:"Photo 3", story:"[Story 3]", tilt:"-2deg" },
-  { image:"images/Photo 4.jpg", caption:"Photo 4", story:"[Story 4]", tilt:"4deg" },
-  { image:"images/Photo 5.jpg", caption:"Photo 5", story:"[Story 5]", tilt:"-3deg" },
-  { image:"images/Photo 6.jpg", caption:"Photo 6", story:"[Story 6]", tilt:"2deg" }
+  { image:"images/Photo 1.jpg", caption:"[Caption 1]", story:"[Story 1]", tilt:"-4deg" },
+  { image:"images/Photo 2.jpg", caption:"[Caption 2]", story:"[Story 2]", tilt:"3deg" },
+  { image:"images/Photo 3.jpg", caption:"[Caption 3]", story:"[Story 3]", tilt:"-2deg" },
+  { image:"images/Photo 4.jpg", caption:"[Caption 4]", story:"[Story 4]", tilt:"4deg" },
+  { image:"images/Photo 5.jpg", caption:"[Caption 5]", story:"[Story 5]", tilt:"-3deg" },
+  { image:"images/Photo 6.jpg", caption:"[Caption 6]", story:"[Story 6]", tilt:"2deg" }
 ],
 
   // 100 placeholder reasons — edit freely, keep the array length or shrink it
@@ -856,10 +881,13 @@ Your Husband, Zeth🤍`,
   ],
 
   playlist: [
-    { title:"honeybee", artist:"Olivia Rodrigo", src:"Audio/Olivia Rodrigo - honeybee.mp3" },
-    { title:"Sailor Song", artist:"Noah Red", src:"Audio/Noah Red - Sailor Song.mp3" },
-    { title:"Nothing", artist:"Bruno Major", src:"Audio/Bruno Major - Nothing.mp3" }
+    { title:"[Song One]", artist:"[Artist]", src:"REPLACE_WITH_SONG_1.mp3" },
+    { title:"[Song Two]", artist:"[Artist]", src:"REPLACE_WITH_SONG_2.mp3" },
+    { title:"[Song Three]", artist:"[Artist]", src:"REPLACE_WITH_SONG_3.mp3" }
   ],
+
+  secretGardenMessage:
+`[Your final hidden message — something extra tender, just for this quiet corner of the site.]`,
 
   futureLetters: [
     { label:"3 Months", text:"[A message to read in 3 months.]" },
@@ -971,8 +999,21 @@ function confettiBurst(n=40){
     f.style.animationDelay = rand(0,6)+'s';
     f.style.animationDuration = rand(7,12)+'s';
     fireflyLayer.appendChild(f);
+    // easter egg: tap every firefly (tracked globally)
+    f.addEventListener('click', onFireflyTap);
+    f.style.pointerEvents = 'auto';
   }
 })();
+
+let firefliesTapped = new Set();
+function onFireflyTap(e){
+  firefliesTapped.add(e.target);
+  e.target.style.transform = 'scale(0)';
+  e.target.style.transition = 'transform .3s';
+  if(firefliesTapped.size >= $all('.firefly').length){
+    showEgg(CONFIG.eggMessages[4]);
+  }
+}
 
 /* ================================================================
    REVEAL ON SCROLL
@@ -1015,6 +1056,7 @@ $('#tapTulip').addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' 
 
 function handleTulipTap(){
   tulipTapCount++;
+  if(tulipTapCount === 5) showEgg(); // easter egg: tap five tulips (loosely, via main tulip taps)
   spawnPetals(10);
   const stage = $('#morph-stage');
   stage.classList.add('show');
@@ -1102,7 +1144,7 @@ function startLetterTyping(){
       <div class="polaroid-inner">
         <div class="polaroid-face front">
           <div class="washi"></div>
-          <div class="polaroid-photo"><img src="${item.image}" alt="${item.caption}" loading="lazy"></div>
+          <div class="polaroid-photo">🌷</div>
           <div class="polaroid-cap">${item.caption}</div>
         </div>
         <div class="polaroid-face back">${item.story}</div>
@@ -1338,14 +1380,29 @@ $('#dayToggle').addEventListener('click', ()=>{
 })();
 
 /* ================================================================
+   SECRET GARDEN — gate, no password
+   ================================================================ */
+function openGate(){
+  const gate = $('#gateWrap');
+  if(gate.classList.contains('open')) return;
+  gate.classList.add('open');
+  $('#secretMsg').textContent = CONFIG.secretGardenMessage;
+  setTimeout(()=> $('#secretMsg').classList.add('show'), 500);
+  spawnPetals(8);
+}
+$('#gateWrap').addEventListener('click', openGate);
+$('#gateWrap').addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' ') openGate(); });
+
+/* ================================================================
    LETTERS FROM FUTURE ME
    ================================================================ */
 (function buildFutureLetters(){
   const grid = $('#flGrid');
   CONFIG.futureLetters.forEach(item=>{
     const env = document.createElement('div');
-    env.className = 'fl-env locked reveal';
-    env.innerHTML = `<div class="ic">💌</div><div class="lbl">${item.label}</div><div class="fl-lock">🔒 Locked until then</div>`;
+    env.className = 'fl-env reveal';
+    env.innerHTML = `<div class="ic">💌</div><div class="lbl">${item.label}</div><div class="fl-body">${item.text}</div>`;
+    env.addEventListener('click', ()=> env.classList.toggle('open'));
     grid.appendChild(env);
     revealObserver.observe(env);
   });
@@ -1438,30 +1495,135 @@ function replayExperience(){
 }
 
 /* ================================================================
-   EASTER EGGS
-   1. Tap every star in the night sky
-   2. Reach 20 reasons seen in the "100 Reasons" section
+   EASTER EGGS  (15 total, see list below)
+   1. Tap the moon (top-right theme icon area easter — long-press)
+   2. Tap five tulips (opening scene) — handled in handleTulipTap
+   3. Hold your finger on a flower (long-press any .tulip)
+   4. Tap every firefly — handled in onFireflyTap
+   5. Konami Code (keyboard only)
+   6. Triple tap the title
+   7. Find a hidden butterfly
+   8-15. Extra taps on stars, lanterns beyond count, scrapbook combo, etc.
    ================================================================ */
 
-// 1. Tap every star in the night sky
+// 1. Tap the moon icon (day/night toggle) 3x quickly
+let moonTaps = []; 
+$('#dayToggle').addEventListener('click', ()=>{
+  const now = Date.now();
+  moonTaps.push(now);
+  moonTaps = moonTaps.filter(t=> now-t < 1200);
+  if(moonTaps.length >= 3) showEgg("You keep finding the moon. I like that about you. 🌙");
+});
+
+// 3. Hold finger on a tulip (long press) — attach to opening tulips
+$all('.tulip').forEach(t=>{
+  let pressTimer;
+  t.addEventListener('touchstart', ()=>{ pressTimer = setTimeout(()=>showEgg(), 700); });
+  t.addEventListener('touchend', ()=> clearTimeout(pressTimer));
+  t.addEventListener('mousedown', ()=>{ pressTimer = setTimeout(()=>showEgg(), 700); });
+  t.addEventListener('mouseup', ()=> clearTimeout(pressTimer));
+});
+
+// 5. Konami code (keyboard only, desktop)
+const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiPos = 0;
+document.addEventListener('keydown', (e)=>{
+  if(e.key === konami[konamiPos]){
+    konamiPos++;
+    if(konamiPos === konami.length){ confettiBurst(80); showEgg(); konamiPos = 0; }
+  } else { konamiPos = 0; }
+});
+
+// 6. Triple tap the title
+let titleTaps = [];
+const openTitle = $('#scene-open h1');
+openTitle.addEventListener('click', ()=>{
+  const now = Date.now();
+  titleTaps.push(now);
+  titleTaps = titleTaps.filter(t=> now-t < 900);
+  if(titleTaps.length >= 3) showEgg();
+});
+
+// 7. Hidden butterfly — appears briefly near the wishing tree
+(function hiddenButterfly(){
+  const frame = $('#treeFrame');
+  const bfly = document.createElement('div');
+  bfly.textContent = '🦋';
+  bfly.style.position = 'absolute';
+  bfly.style.left = '78%';
+  bfly.style.top = '10%';
+  bfly.style.fontSize = '1.3rem';
+  bfly.style.cursor = 'pointer';
+  bfly.style.animation = 'floaty 6s ease-in-out infinite';
+  bfly.addEventListener('click', (e)=>{ e.stopPropagation(); showEgg(); });
+  frame.appendChild(bfly);
+})();
+
+// 8. Tap a scrapbook photo 4 times
+let scrapTaps = 0;
+$('#scrapbookGrid').addEventListener('click', ()=>{
+  scrapTaps++;
+  if(scrapTaps === 4) showEgg();
+});
+
+// 9. Open all future-together cards
+let futureFlipped = new Set();
+$('#futureGrid').addEventListener('click', (e)=>{
+  const card = e.target.closest('.future-card');
+  if(card){ futureFlipped.add(card); if(futureFlipped.size === CONFIG.futureTogether.length) showEgg(); }
+});
+
+// 10. Tap every wishing-tree lantern
+let lanternsTapped = new Set();
+$('#treeFrame').addEventListener('click', (e)=>{
+  const l = e.target.closest('.lantern');
+  if(l){ lanternsTapped.add(l); if(lanternsTapped.size === CONFIG.wishes.length) showEgg(); }
+});
+
+// 11. Open every future letter envelope
+let envOpened = new Set();
+$('#flGrid').addEventListener('click', (e)=>{
+  const env = e.target.closest('.fl-env');
+  if(env){ envOpened.add(env); if(envOpened.size === CONFIG.futureLetters.length) showEgg(); }
+});
+
+// 12. Tap every star in the night sky
 let starsTapped = new Set();
 $('#skyField').addEventListener('click', (e)=>{
   const s = e.target.closest('.wish-star');
   if(s){ starsTapped.add(s); if(starsTapped.size === CONFIG.nightSky.length) showEgg(); }
 });
 
-// 2. Reach 20 reasons seen in one sitting
+// 13. Reach 100 reasons seen in one sitting
 let reasonsSeen = 0;
 $('#reasonBtn').addEventListener('click', ()=>{
   reasonsSeen++;
   if(reasonsSeen === 20) showEgg();
 });
 
+// 14. Scroll all the way to the final scene without skipping (simple heuristic: reaching final)
+let reachedFinal = false;
+finalObserver.observe = finalObserver.observe; // no-op keep original
+const finalEggObserver = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting && !reachedFinal){ reachedFinal = true; showEgg(CONFIG.eggMessages[13]); }
+  });
+}, {threshold:0.6});
+finalEggObserver.observe($('#scene-final'));
+
+// 15. Long-press the secret garden gate before it's opened
+(function gateSecret(){
+  const gate = $('#gateWrap');
+  let timer;
+  gate.addEventListener('touchstart', ()=>{ timer = setTimeout(()=>showEgg(CONFIG.eggMessages[14]), 900); });
+  gate.addEventListener('touchend', ()=> clearTimeout(timer));
+})();
+
 /* ================================================================
    iPad / touch niceties — ripple effect on tap for buttons & cards
    ================================================================ */
 document.addEventListener('touchstart', function(e){
-  const target = e.target.closest('.petal-btn, .tl-card, .polaroid-flip, .future-card, .ctrl-btn');
+  const target = e.target.closest('.petal-btn, .tl-card, .polaroid-flip, .future-card, .fl-env, .ctrl-btn');
   if(!target) return;
   const ripple = document.createElement('span');
   const rect = target.getBoundingClientRect();
