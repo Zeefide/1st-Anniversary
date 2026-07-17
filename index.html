@@ -505,7 +505,7 @@ button:focus-visible, .tap-tulip-wrap:focus-visible{ outline:2px solid var(--gol
 
 <!-- Audio element — swap the <source> src to change the music -->
 <audio id="bgm" loop preload="none">
-  <source src="REPLACE_WITH_YOUR_MUSIC_FILE.mp3" type="audio/mpeg">
+  <source src="music/Background Music.mp3" type="audio/mpeg">
 </audio>
 
 <!-- ================= OPENING SCENE ================= -->
@@ -1003,21 +1003,8 @@ function confettiBurst(n=40){
     f.style.animationDelay = rand(0,6)+'s';
     f.style.animationDuration = rand(7,12)+'s';
     fireflyLayer.appendChild(f);
-    // easter egg: tap every firefly (tracked globally)
-    f.addEventListener('click', onFireflyTap);
-    f.style.pointerEvents = 'auto';
   }
 })();
-
-let firefliesTapped = new Set();
-function onFireflyTap(e){
-  firefliesTapped.add(e.target);
-  e.target.style.transform = 'scale(0)';
-  e.target.style.transition = 'transform .3s';
-  if(firefliesTapped.size >= $all('.firefly').length){
-    showEgg(CONFIG.eggMessages[4]);
-  }
-}
 
 /* ================================================================
    REVEAL ON SCROLL
@@ -1060,7 +1047,6 @@ $('#tapTulip').addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' 
 
 function handleTulipTap(){
   tulipTapCount++;
-  if(tulipTapCount === 5) showEgg(); // easter egg: tap five tulips (loosely, via main tulip taps)
   spawnPetals(10);
   const stage = $('#morph-stage');
   stage.classList.add('show');
@@ -1499,129 +1485,24 @@ function replayExperience(){
 }
 
 /* ================================================================
-   EASTER EGGS  (15 total, see list below)
-   1. Tap the moon (top-right theme icon area easter — long-press)
-   2. Tap five tulips (opening scene) — handled in handleTulipTap
-   3. Hold your finger on a flower (long-press any .tulip)
-   4. Tap every firefly — handled in onFireflyTap
-   5. Konami Code (keyboard only)
-   6. Triple tap the title
-   7. Find a hidden butterfly
-   8-15. Extra taps on stars, lanterns beyond count, scrapbook combo, etc.
+   EASTER EGGS
+   1. Tap every star in the night sky
+   2. Reach 20 reasons seen in the "100 Reasons" section
    ================================================================ */
 
-// 1. Tap the moon icon (day/night toggle) 3x quickly
-let moonTaps = []; 
-$('#dayToggle').addEventListener('click', ()=>{
-  const now = Date.now();
-  moonTaps.push(now);
-  moonTaps = moonTaps.filter(t=> now-t < 1200);
-  if(moonTaps.length >= 3) showEgg("You keep finding the moon. I like that about you. 🌙");
-});
-
-// 3. Hold finger on a tulip (long press) — attach to opening tulips
-$all('.tulip').forEach(t=>{
-  let pressTimer;
-  t.addEventListener('touchstart', ()=>{ pressTimer = setTimeout(()=>showEgg(), 700); });
-  t.addEventListener('touchend', ()=> clearTimeout(pressTimer));
-  t.addEventListener('mousedown', ()=>{ pressTimer = setTimeout(()=>showEgg(), 700); });
-  t.addEventListener('mouseup', ()=> clearTimeout(pressTimer));
-});
-
-// 5. Konami code (keyboard only, desktop)
-const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-let konamiPos = 0;
-document.addEventListener('keydown', (e)=>{
-  if(e.key === konami[konamiPos]){
-    konamiPos++;
-    if(konamiPos === konami.length){ confettiBurst(80); showEgg(); konamiPos = 0; }
-  } else { konamiPos = 0; }
-});
-
-// 6. Triple tap the title
-let titleTaps = [];
-const openTitle = $('#scene-open h1');
-openTitle.addEventListener('click', ()=>{
-  const now = Date.now();
-  titleTaps.push(now);
-  titleTaps = titleTaps.filter(t=> now-t < 900);
-  if(titleTaps.length >= 3) showEgg();
-});
-
-// 7. Hidden butterfly — appears briefly near the wishing tree
-(function hiddenButterfly(){
-  const frame = $('#treeFrame');
-  const bfly = document.createElement('div');
-  bfly.textContent = '🦋';
-  bfly.style.position = 'absolute';
-  bfly.style.left = '78%';
-  bfly.style.top = '10%';
-  bfly.style.fontSize = '1.3rem';
-  bfly.style.cursor = 'pointer';
-  bfly.style.animation = 'floaty 6s ease-in-out infinite';
-  bfly.addEventListener('click', (e)=>{ e.stopPropagation(); showEgg(); });
-  frame.appendChild(bfly);
-})();
-
-// 8. Tap a scrapbook photo 4 times
-let scrapTaps = 0;
-$('#scrapbookGrid').addEventListener('click', ()=>{
-  scrapTaps++;
-  if(scrapTaps === 4) showEgg();
-});
-
-// 9. Open all future-together cards
-let futureFlipped = new Set();
-$('#futureGrid').addEventListener('click', (e)=>{
-  const card = e.target.closest('.future-card');
-  if(card){ futureFlipped.add(card); if(futureFlipped.size === CONFIG.futureTogether.length) showEgg(); }
-});
-
-// 10. Tap every wishing-tree lantern
-let lanternsTapped = new Set();
-$('#treeFrame').addEventListener('click', (e)=>{
-  const l = e.target.closest('.lantern');
-  if(l){ lanternsTapped.add(l); if(lanternsTapped.size === CONFIG.wishes.length) showEgg(); }
-});
-
-// 11. Open every future letter envelope
-let envOpened = new Set();
-$('#flGrid').addEventListener('click', (e)=>{
-  const env = e.target.closest('.fl-env');
-  if(env){ envOpened.add(env); if(envOpened.size === CONFIG.futureLetters.length) showEgg(); }
-});
-
-// 12. Tap every star in the night sky
+// 1. Tap every star in the night sky
 let starsTapped = new Set();
 $('#skyField').addEventListener('click', (e)=>{
   const s = e.target.closest('.wish-star');
   if(s){ starsTapped.add(s); if(starsTapped.size === CONFIG.nightSky.length) showEgg(); }
 });
 
-// 13. Reach 100 reasons seen in one sitting
+// 2. Reach 20 reasons seen in one sitting
 let reasonsSeen = 0;
 $('#reasonBtn').addEventListener('click', ()=>{
   reasonsSeen++;
   if(reasonsSeen === 20) showEgg();
 });
-
-// 14. Scroll all the way to the final scene without skipping (simple heuristic: reaching final)
-let reachedFinal = false;
-finalObserver.observe = finalObserver.observe; // no-op keep original
-const finalEggObserver = new IntersectionObserver(entries=>{
-  entries.forEach(en=>{
-    if(en.isIntersecting && !reachedFinal){ reachedFinal = true; showEgg(CONFIG.eggMessages[13]); }
-  });
-}, {threshold:0.6});
-finalEggObserver.observe($('#scene-final'));
-
-// 15. Long-press the secret garden gate before it's opened
-(function gateSecret(){
-  const gate = $('#gateWrap');
-  let timer;
-  gate.addEventListener('touchstart', ()=>{ timer = setTimeout(()=>showEgg(CONFIG.eggMessages[14]), 900); });
-  gate.addEventListener('touchend', ()=> clearTimeout(timer));
-})();
 
 /* ================================================================
    iPad / touch niceties — ripple effect on tap for buttons & cards
