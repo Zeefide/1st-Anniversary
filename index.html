@@ -397,11 +397,12 @@ input[type=range]{ accent-color:var(--sage-dark); width:140px; }
 /* ================= FUTURE LETTERS ================= */
 #scene-futureletters{ background:var(--cream); }
 .fl-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:22px; margin-top:30px; }
-.fl-env{ background:var(--white); border-radius:16px; padding:26px 20px; text-align:center; cursor:pointer; box-shadow:0 14px 30px -16px rgba(60,78,55,.35); }
+.fl-env{ background:var(--white); border-radius:16px; padding:26px 20px; text-align:center; box-shadow:0 14px 30px -16px rgba(60,78,55,.35); }
 .fl-env .ic{ font-size:2.4rem; }
 .fl-env .lbl{ font-family:var(--display); font-size:1.2rem; color:var(--sage-deep); margin-top:8px; }
-.fl-body{ max-height:0; overflow:hidden; transition:max-height .6s var(--ease-silk); font-family:var(--script); font-size:1.1rem; color:var(--sage-dark); text-align:left; }
-.fl-env.open .fl-body{ max-height:300px; margin-top:14px; }
+.fl-env.locked{ cursor:not-allowed; opacity:.72; filter:grayscale(.25); }
+.fl-env.locked .ic{ filter:grayscale(1) opacity(.7); }
+.fl-lock{ font-family:var(--body); font-size:.78rem; letter-spacing:.05em; color:var(--sage-dark); margin-top:10px; opacity:.85; }
 
 /* ================= WISHING TREE ================= */
 #scene-tree{ background:linear-gradient(180deg,var(--cream), #eef0e2); text-align:center; }
@@ -856,12 +857,12 @@ Your Husband, Zeth🤍`,
 
   playlist: [
     { title:"honeybee", artist:"Olivia Rodrigo", src:"Audio/Olivia Rodrigo - honeybee.mp3" },
-    { title:"Sailor Song", artist:"Noah Rad", src:"Audio/Noah Rad - Sailor Song.mp3" },
+    { title:"Sailor Song", artist:"Noah Red", src:"Audio/Noah Red - Sailor Song.mp3" },
     { title:"Nothing", artist:"Bruno Major", src:"Audio/Bruno Major - Nothing.mp3" }
   ],
 
   futureLetters: [
-    { label:"3 Months", text:"" },
+    { label:"3 Months", text:"[A message to read in 3 months.]" },
     { label:"6 Months", text:"[A message to read in 6 months.]" },
     { label:"1 Year", text:"[A message to read in 1 year.]" },
     { label:"5 Years", text:"[A message to read in 5 years.]" }
@@ -1343,9 +1344,8 @@ $('#dayToggle').addEventListener('click', ()=>{
   const grid = $('#flGrid');
   CONFIG.futureLetters.forEach(item=>{
     const env = document.createElement('div');
-    env.className = 'fl-env reveal';
-    env.innerHTML = `<div class="ic">💌</div><div class="lbl">${item.label}</div><div class="fl-body">${item.text}</div>`;
-    env.addEventListener('click', ()=> env.classList.toggle('open'));
+    env.className = 'fl-env locked reveal';
+    env.innerHTML = `<div class="ic">💌</div><div class="lbl">${item.label}</div><div class="fl-lock">🔒 Locked until then</div>`;
     grid.appendChild(env);
     revealObserver.observe(env);
   });
@@ -1461,7 +1461,7 @@ $('#reasonBtn').addEventListener('click', ()=>{
    iPad / touch niceties — ripple effect on tap for buttons & cards
    ================================================================ */
 document.addEventListener('touchstart', function(e){
-  const target = e.target.closest('.petal-btn, .tl-card, .polaroid-flip, .future-card, .fl-env, .ctrl-btn');
+  const target = e.target.closest('.petal-btn, .tl-card, .polaroid-flip, .future-card, .ctrl-btn');
   if(!target) return;
   const ripple = document.createElement('span');
   const rect = target.getBoundingClientRect();
